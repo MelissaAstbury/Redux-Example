@@ -1,14 +1,31 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
 const Posts = () => {
+  const [posts, setPosts] = useState([]);
+  //   const singlePost = posts.forEach((post) => {
+  //     console.log(post.title);
+  //   });
+
   useEffect(() => {
-    fetch('https://jsonplaceholder.typicode.com/posts')
-      .then((res) => res.json())
-      .then((data) => console.log(data));
-  });
+    (async () => {
+      try {
+        let response = await axios.get(
+          'https://jsonplaceholder.typicode.com/posts'
+        );
+        setPosts(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    })();
+  }, [setPosts]);
+
   return (
     <div>
       <h1>Posts</h1>
+      {posts.map((post) => {
+        return <p key={post.id}>{post.title}</p>;
+      })}
     </div>
   );
 };
